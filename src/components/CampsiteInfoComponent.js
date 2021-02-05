@@ -34,6 +34,8 @@ function RenderComments({ comments }) {
         })}
       </div>
     );
+  } else {
+    <div />
   }
 }
 
