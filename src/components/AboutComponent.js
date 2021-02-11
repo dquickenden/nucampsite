@@ -87,6 +87,8 @@ if (props.partner) {
                 </Media>
             </React.Fragment>
         );
+} else {
+    <div/>
     }
 }
 
