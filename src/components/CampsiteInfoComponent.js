@@ -1,6 +1,23 @@
-import React from "react";
-import { Card, CardImg, CardBody, CardText, Breadcrumb, BreadcrumbItem } from "reactstrap";
+import React, { Component } from "react";
+import {
+  Card,
+  CardImg,
+  CardBody,
+  CardText,
+  Breadcrumb,
+  BreadcrumbItem,
+  Button,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  Input,
+  Label,
+} from "reactstrap";
 import { Link } from "react-router-dom";
+import { Control, Errors, LocalForm } from "react-redux-form";
+
+const maxLength = (len) => (val) => !val || val.length <= len;
+const minLength = (len) => (val) => val && val.length >= len;
 
 function RenderCampsite({ campsite }) {
   return (
@@ -8,7 +25,7 @@ function RenderCampsite({ campsite }) {
       <Card>
         <CardImg top src={campsite.image} alt={campsite.name} />
         <CardBody>
-          <CardText>{ campsite.description }</CardText>
+          <CardText>{campsite.description}</CardText>
         </CardBody>
       </Card>
     </div>
@@ -33,10 +50,11 @@ function RenderComments({ comments }) {
             </p>
           );
         })}
+        <CommentForm />
       </div>
     );
   } else {
-    <div />
+    <div />;
   }
 }
 
@@ -64,6 +82,104 @@ function CampsiteInfo(props) {
     );
   }
   return <div />;
+}
+
+class CommentForm extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isModalOpen: false
+    };
+
+    this.toggleModal = this.toggleModal.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  toggleModal() {
+    this.setState({
+      isModalOpen: !this.state.isModalOpen,
+    });
+  }
+
+  handleSubmit(values) {
+    console.log("Current state is: " + JSON.stringify(values));
+    alert("Current state is: " + JSON.stringify(values));
+  }
+
+  render() {
+    return (
+      <React.Fragment>
+        <div className="row row-content align-items-center">
+          <div className="col">
+            <Button outline onClick={this.toggleModal}>
+              <i className="btn btn-link fa fa-pencil" />
+              Submit Comment
+            </Button>
+          </div>
+        </div>
+
+        <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
+          <ModalHeader toggle={this.toggleModal}>Login</ModalHeader>
+          <ModalBody>
+            <LocalForm onSubmit={values => this.handleSubmit(values)}>
+              <div className="form-group">
+                <Label htmlFor="rating">Rating</Label>
+                <Control.select
+                  model=".rating"
+                  name="rating"
+                  placeholder="Rating"
+                  className="form-control"
+                >
+                  <option>1</option>
+                  <option>2</option>
+                  <option>3</option>
+                  <option>4</option>
+                  <option>5</option>
+                </Control.select>
+              </div>
+              <div className="form-group">
+                <Label htmlFor="author">Author</Label>
+                <Control.text
+                  model=".author"
+                  id="author"
+                  name="author"
+                  placeholder="Author"
+                  className="form-control"
+                  validators={{
+                    minLength: minLength(2),
+                    maxLength: maxLength(15),
+                  }}
+                />
+                <Errors
+                  model=".author"
+                  className="text-danger"
+                  show="touched"
+                  component="div"
+                  messages={{
+                    minLength: "Must be at least 2 characters",
+                    maxLength: "Must be 15 characters or less",
+                  }}
+                />
+              </div>
+              <div className="form-group">
+                <Label htmlFor="text">Text </Label>
+                <Input
+                  model=".text"
+                  type="text"
+                  name="text"
+                  innerRef={(input) => (this.text = input)}
+                />
+              </div>
+              <Button type="submit" value="submit" color="primary">
+                Login
+              </Button>
+            </LocalForm>
+          </ModalBody>
+        </Modal>
+      </React.Fragment>
+    );
+  }
 }
 
 export default CampsiteInfo;
