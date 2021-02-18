@@ -9,7 +9,7 @@ import {
   Row,
 } from "reactstrap";
 import { Link } from "react-router-dom";
-import { Control, LocalForm, Errors } from "react-redux-form";
+import { Control, Form, Errors, actions } from "react-redux-form";
 
 const required = val => val && val.length;  // This is for fields that are required. It verifies if the field has a value in it, returns true if it does and false if not.
 const maxLength = len => val => !val || (val.length <= len);  // Verify if the length of the data entered is great than the maximum amount
@@ -60,6 +60,7 @@ class Contact extends Component {
   handleSubmit(values) {
     console.log("Current state is: " + JSON.stringify(values));
     alert("Current state is: " + JSON.stringify(values));
+    this.props.resetFeedbackForm();
   }
 
   render() {
@@ -111,7 +112,7 @@ class Contact extends Component {
           </div>
 
           <div className="col-md-10">
-            <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
+            <Form model="feedbackForm" onSubmit={(values) => this.handleSubmit(values)}>
               <Row className="form-group">
                 <Label htmlFor="firstName" md={2}>
                   First Name
@@ -276,7 +277,7 @@ class Contact extends Component {
                   </Button>
                 </Col>
               </Row>
-            </LocalForm>
+            </Form>
           </div>
         </div>
       </div>
