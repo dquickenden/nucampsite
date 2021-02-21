@@ -9,7 +9,7 @@ import {
   Row,
 } from "reactstrap";
 import { Link } from "react-router-dom";
-import { Control, Form, Errors, actions } from "react-redux-form";
+import { Control, Form, Errors } from "react-redux-form";
 
 const required = val => val && val.length;  // This is for fields that are required. It verifies if the field has a value in it, returns true if it does and false if not.
 const maxLength = len => val => !val || (val.length <= len);  // Verify if the length of the data entered is great than the maximum amount
